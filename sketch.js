@@ -8,7 +8,7 @@ function setup() {
 
 function draw() {
   background(0);
-  // grid.step();
+  grid.step();
   grid.show();
 }
 
@@ -22,6 +22,8 @@ function mousePressed() {
 //              DOWN_ARROW: sets nexts node clicked to start 
 //              LEFT_ARROW: resets clicks to set walls
 //              S: starts the solving process
+//              T: steps through the search algorithm
+//              A: allows nodes to be set again
 function keyPressed() {
   grid.setMode(keyCode);
   if (keyCode == 83) grid.solve();

@@ -1,0 +1,3 @@
+1. Implement a random maze generator
+2. Implement other search algorithms
+3. Implement a more user friendly usage method

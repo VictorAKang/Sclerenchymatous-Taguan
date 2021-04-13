@@ -123,6 +123,9 @@ class Grid {
       }
   }
 
+  /*
+  / EFFECTS: sets the class to solving mode. create a GraphSearchFrame
+  */
   solve() {
     this.solving = true;
     this.setNeighbours();
@@ -130,6 +133,10 @@ class Grid {
     this.searchFrame = new GraphSearchFrame(startNode);
   }
 
+  /*
+  / EFFECTS: does nothing if solving == false
+  /          if solving == true, uncolors currently shown path, steps through the search and shows current path
+  */
   step() {
     if (!this.solving) return;
     this.disableCurrent();
@@ -137,6 +144,9 @@ class Grid {
     this.stepSearch();
   }
 
+  /*
+  / EFFECTS: steps through the search function, stopping in case it finds the goal node
+  */
   stepSearch() {
     var currentPath = this.searchFrame.current;
     var goalNode = this.cells[this.goal[0]][this.goal[1]];
@@ -171,12 +181,20 @@ class Grid {
     }
   }
 
+  /*
+  / EFFECTS: sets all nodes with a list of their neighbours nodes that are not walls
+  */
   setNeighbours() {
     for (var i = 0; i < this.x; i++) 
       for (var j = 0; j < this.y; j++) 
         this.cells[i][j].setNeighbours(this.findNeighbours(i,j));
   }
 
+  /*
+  / PARAMETERS: i and j: indexes of the cell requesting its neighbours
+  / EFFECTS: obtains a list of Nodes that are inbounds and are neighbours of the requested node
+  / RETURNS: list of Nodes
+  */
   findNeighbours(i, j) {
     var neighbours = [];
 
@@ -188,6 +206,9 @@ class Grid {
     return neighbours;
   }
 
+  /*
+  / EFFECTS: uncolors all nodes that are part of the current path being searched
+  */
   disableCurrent() {
     var currentPath = this.searchFrame.getCurrent();
     for (var i = 0; i < currentPath.length; i++) 

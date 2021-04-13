@@ -16,15 +16,25 @@ class GraphSearchFrame{
     this.current = [];
   }
 
+  /*
+  / PARAMETERS: path: list of Nodes
+  / EFFECTS: adds the given list of Nodes to the frontier
+  */
   addToFrontier(path) {
     this.frontier.push(path);
   }
 
+  /*
+  / EFFECTS: removes the next path to be analyzed from the frontier
+  */
   updateCurrent() {
     this.current = this.frontier.shift();
     // print(this.current);
   }
 
+  /*
+  / RETURNS: returns the current path
+  */
   getCurrent() {
     return this.current;
   }
