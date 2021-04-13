@@ -8,7 +8,7 @@
 /        wall: boolean that indicates if the node is a wall (not part of the graph)
 /        explored: boolean that indicates if the node has been explored 
 /        current: boolean that indicates if the node is the currently explored path
-/        adjacent: array of adjacent nodes
+/        neighbours: array of adjacent nodes
 */
 class Node{
   
@@ -45,6 +45,8 @@ class Node{
     if (this.goal) fill (255, 0, 0);
     else if (this.start) fill (0, 255, 0);
     else if (this.wall) fill(0);
+    else if (this.current) fill(0, 0, 255);
+    else if (this.explored) fill(200);
     else fill(255);
     square(this.x, this.y, this.sideLength);
   }
@@ -76,11 +78,19 @@ class Node{
     if (clickMode != 2) this.start = false;
   }
   
-  isWall() {
-    return this.wall;
+  setExplored() {
+    this.explored = true;
   }
-  
-  isStart() {
-    return this.start;
+
+  setCurrent() {
+    this.current = true;
+  }
+
+  disableCurrent() {
+    this.current = false;
+  }
+
+  setNeighbours(neighbours) {
+    this.neighbours = neighbours;
   }
 }

@@ -16,7 +16,7 @@
 /
 /        cells: matrix that stores the information about each node
 /        
-/        graph: stores the graph representation of the grid
+/        searchFrame: stores information and functions related to the search
 /        solving: boolean that informs if the graph is being solved
 */
 
@@ -79,7 +79,7 @@ class Grid {
   /           if solving == true, will not update node
   */
   update(mx, my) {
-    if (this.solving) return
+    if (this.solving) return;
     var x = Math.floor(mx / this.sideLength);
     var y = Math.floor(my / this.sideLength);
     
@@ -122,26 +122,75 @@ class Grid {
         this.start = [x,y];
       }
   }
-  
-  /*
-  /  EFFECTS: generates graph and sets solving = true
-  */
-  StartSearch() {
-    this.generateGraph();
+
+  solve() {
     this.solving = true;
+    this.setNeighbours();
+    var startNode = this.cells[this.start[0]][this.start[1]];
+    this.searchFrame = new GraphSearchFrame(startNode);
   }
-  
-  /*
-  /  EFFECTS: generates the graph given the current state of the grid
-  */
-  generateGraph() {
-    
+
+  step() {
+    if (!this.solving) return;
+    this.disableCurrent();
+    this.searchFrame.updateCurrent();
+    this.stepSearch();
   }
-  
-  /*
-  /  EFFECTS: execute one step of the search 
-  */
-  solveGraph() {
-    
+
+  stepSearch() {
+    var currentPath = this.searchFrame.current;
+    var goalNode = this.cells[this.goal[0]][this.goal[1]];
+    var frontierNode = currentPath[currentPath.length - 1];
+
+    frontierNode.setExplored();
+    for (var i = 0; i < currentPath.length; i++) 
+      currentPath[i].setCurrent();
+
+    if (frontierNode == goalNode) {
+      this.solving = false;
+      return;
+    }
+
+    var neighbours = frontierNode.neighbours;
+    for (var i = 0; i < neighbours.length; i++) {
+      var aux = neighbours[i];
+
+      var cycle = false;
+      for (var j = 0; j < currentPath.length; j++) 
+        if (currentPath[j] == aux) {
+          // print("found cycle");
+          cycle = true;
+          break;
+        }
+      
+      if (!cycle) {
+        var newPath = Array.from(currentPath);
+        newPath.push(aux);
+        this.searchFrame.addToFrontier(newPath);
+      }
+    }
+  }
+
+  setNeighbours() {
+    for (var i = 0; i < this.x; i++) 
+      for (var j = 0; j < this.y; j++) 
+        this.cells[i][j].setNeighbours(this.findNeighbours(i,j));
+  }
+
+  findNeighbours(i, j) {
+    var neighbours = [];
+
+    if (i != 0 && !this.cells[i - 1][j].wall) neighbours.push(this.cells[i - 1][j]);
+    if (i != this.x - 1 && !this.cells[i + 1][j].wall) neighbours.push(this.cells[i + 1][j]);
+    if (j != 0 && !this.cells[i][j - 1].wall) neighbours.push(this.cells[i][j - 1]);
+    if (j != this.y - 1 && !this.cells[i][j + 1].wall) neighbours.push(this.cells[i][j + 1]);
+
+    return neighbours;
+  }
+
+  disableCurrent() {
+    var currentPath = this.searchFrame.getCurrent();
+    for (var i = 0; i < currentPath.length; i++) 
+      currentPath[i].disableCurrent();
   }
 }

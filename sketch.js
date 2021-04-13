@@ -8,6 +8,7 @@ function setup() {
 
 function draw() {
   background(0);
+  // grid.step();
   grid.show();
 }
 
@@ -24,5 +25,8 @@ function mousePressed() {
 function keyPressed() {
   grid.setMode(keyCode);
   if (keyCode == 83) grid.solve();
+  if (keyCode == 84) grid.step();  // t
+  if (keyCode == 65) grid.solving = false;  //a
+  
 }
 
