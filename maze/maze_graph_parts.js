@@ -22,6 +22,21 @@ export class Maze_node {
     get_edges() {
         return this.edges;
     }
+
+    print_node() {
+        if (this.is_start) return "S";
+        if (this.is_end) return "E";
+        return " ";
+    }
+
+    print_edge(neighbour_node) {
+        for (let i = 0; i < this.edges.length; i++) {
+            let edge = this.edges[i];
+            if (edge.get_neighbours().includes(neighbour_node))
+                return edge.print();
+        }
+        throw new Error();
+    }
 }
 
 export class Maze_edge {
@@ -38,5 +53,10 @@ export class Maze_edge {
 
     get_neighbours() {
         return this.neighbours;
+    }
+
+    print() {
+        if (this.is_wall) return "X";
+        return " ";
     }
 }

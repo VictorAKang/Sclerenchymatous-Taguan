@@ -1,4 +1,4 @@
-import { Maze_node, Maze_edge } from "./maze_graph_parts";
+import { Maze_node, Maze_edge } from "./maze_graph_parts.js";
 
 export class Maze_generator {
     constructor(width, height) {
@@ -20,7 +20,7 @@ export class Maze_generator {
             }
         }
 
-        randomized_prim(maze);
+        this.randomized_prim(maze);
 
         return maze;
     }
@@ -37,11 +37,11 @@ export class Maze_generator {
         let node = new Maze_node();
 
         if (x > 0) 
-            let edge = new Maze_edge(node, maze[x - 1][y]);
+            var edge = new Maze_edge(node, maze[x - 1][y]);
         
 
         if (y > 0) 
-            let edge = new Maze_edge(node, maze[x][y - 1]);
+            var edge = new Maze_edge(node, maze[x][y - 1]);
         
         
         return node;
@@ -53,12 +53,29 @@ export class Maze_generator {
     /  the spanning tree is done by setting edge to be not a wall
     */
     randomized_prim(maze) {
-        let visited = [maze[0][0]];
-        let frontier = [];
-        frontier.push(maze[0][0].get_edges());
+        let visited = new Set();
+        let frontier = new Set();
+        visited.add(maze[0][0]);
+        maze[0][0].get_edges().forEach((edge) => {
+            frontier.add(edge);
+        });
 
-        while (visited.length != this.width * this.height) {
+        while (visited.size != this.width * this.height) {
+            let random_index = Math.floor(Math.random() * frontier.size);
+            let edge = Array.from(frontier)[random_index];
+            let both_visited = true;
+            edge.get_neighbours().forEach((node) => {
+                if (!visited.has(node)) {
+                    both_visited = false;
+                    visited.add(node);
+                    node.get_edges().forEach((neighbour_edge) => {
+                        frontier.add(neighbour_edge);
+                    });
+                }
+            });
 
+            if (!both_visited) edge.set_wall(false);
+            frontier.delete(edge);
         }
     }
 }
