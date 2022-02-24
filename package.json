@@ -1,0 +1,9 @@
+{
+  "name": "maze_solver",
+  "version": "1.0.0",
+  "description": "a library of algorithms to solve a maze and a visualizer to show them in action",
+  "main": "index.js",
+  "author": "Victor Akita Kang",
+  "license": "MIT",
+  "type": "module"
+}
